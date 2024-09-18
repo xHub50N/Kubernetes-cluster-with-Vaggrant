@@ -22,3 +22,7 @@ Aby przejść do systemu ubuntu wystarczy wpisać komendę: `wsl -d Ubuntu` i au
 ![image](https://github.com/user-attachments/assets/918644af-509d-4bd9-b4f8-7391da661102)
 
 ## 2. Oracle VirtualBox
+Oracle VirtualBox to darmowe oprogramowanie do wirtualizacji, które umożliwia uruchamianie wielu systemów operacyjnych na jednym fizycznym komputerze. Dzięki VirtualBox można tworzyć i zarządzać maszynami wirtualnymi, co pozwala na testowanie różnych systemów operacyjnych, aplikacji oraz symulowanie różnych środowisk bez potrzeby instalacji ich bezpośrednio na komputerze.
+
+Aby zainstalować oprogramowanie należy przejść do strony [VirtualBox Download](https://www.virtualbox.org/wiki/Downloads)
+
