@@ -7,5 +7,5 @@ Dokumentacja zawiera informacje jak krok po kroku zainstalować odpowiednie opro
 - [1. Hardware](#1-hardware)
 
 
-## 1.Hardware
+## 1. Hardware
 
