@@ -1,5 +1,5 @@
 ---
-- hosts: all
+- hosts: all # Plik dotyczy wszystkich hostów
   become: true
   tasks:
     - name: Zmień nazwę hosta w /etc/hostname
@@ -8,7 +8,7 @@
         line: "{{ hostname }}"
         create: yes
 
-    - name: Zaktualizuj wpis 127.0.0.2 w /etc/hosts
+    - name: Zaktualizuj nazwę dla 127.0.0.2 w /etc/hosts
       lineinfile:
         path: /etc/hosts
         regexp: "^127.0.0.2"
