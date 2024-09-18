@@ -10,5 +10,8 @@ Dokumentacja zawiera informacje jak krok po kroku zainstalować odpowiednie opro
 ## 1. WSL
 W realizacji projektu wykorzystam WSL czyli Windows Subsystem for Linux. Jest to część systemu operacyjnego Windows, które zostało wprowadzone w wersji 10. W moim przypadku wykorzystam dystrybuję Ubuntu która domyślnie jest instalowana w ramach WSL.
 
-Aby zainstalować oprogramowanie wystarczy wykorzystać polecenie: `wsl --install`
+Aby zainstalować oprogramowanie wystarczy wykorzystać polecenie: `wsl --install`, zostanie zainstalowana dystrybucja Ubuntu, jeśli chcemy wykorzystać inną dystrybucję musimy wykorzystać to polecenie: `wsl --install -d <Nazwa-dystrybucji>`
 
+Po instalacji warto sprawdzić czy wszystko się poprawnie pobrało: `wsl -l`
+
+![image](https://github.com/user-attachments/assets/44a1f80a-d9ba-4937-bf79-282856ad8e1a)
