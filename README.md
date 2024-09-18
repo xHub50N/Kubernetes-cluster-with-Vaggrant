@@ -8,6 +8,8 @@ Dokumentacja zawiera informacje jak krok po kroku zainstalować odpowiednie opro
 - [2. Oracle VirtualBox](#2-Oracle-VirtualBox)
 - [3. Podłączenie VirtualBox do WSL](#3-Podłączenie-VirtualBox-do-WSL)
   - [3.1. Instalacja Vagrant](#31-Instalacja-Vagrant)
+  - [3.2. Konfiguracja Ubuntu](#32-Konfiguracja-Ubuntu)
+  - [3.3 Import pliku Vagrantfile](#33-Import-pliku-Vagrantfile)
 
 
 ## 1. WSL
@@ -48,8 +50,26 @@ W naszym przypadku zainstalujemy Vagranta z poziomu systemu Ubuntu. Więcej info
 ### 3.2 Konfiguracja Ubuntu
 Aby podłączyć VirtualBox do Ubuntu należy wykonać te polecenia:
 
-`# append those two lines into ~/.bashrc
-echo 'export VAGRANT_WSL_ENABLE_WINDOWS_ACCESS="1"' >> ~/.bashrc
-echo 'export PATH="$PATH:/mnt/c/Program Files/Oracle/VirtualBox"' >> ~/.bashrc
-echo 'export VAGRANT_WSL_WINDOWS_ACCESS_USER_HOME_PATH="/mnt/c/Users/huber"'
-source ~/.bashrc`
+`echo 'export VAGRANT_WSL_ENABLE_WINDOWS_ACCESS="1"' >> ~/.bashrc`
+
+`echo 'export PATH="$PATH:/mnt/c/Program Files/Oracle/VirtualBox"' >> ~/.bashrc`
+
+`echo 'export VAGRANT_WSL_WINDOWS_ACCESS_USER_HOME_PATH="/mnt/c/Users/huber"'`
+
+`source ~/.bashrc`
+
+Oraz dodatkowo musimy zainstalować plugin do vagranta
+`vagrant plugin install virtualbox_WSL2`
+
+### 3.3 Import pliku Vagrantfile
+Zalecam aby wykorzystać lokalizację którą podaliśmy jako domowy katalog użytkownika w Windows tak jak u mnie czyli /mnt/c/Users/huber **Warto zwrócić uwagę na to że nie podajemy ścieżki tak jak w Windows czyli C:\Users\huber tylko korzystamy z Linuxowego schematu. Pliki które są współdzielone z Linuxem znajdują się w katalogu /mnt**
+
+Plik Vagrantfile jest w repozytorium i tam szczegółowo jest opisane w pliku się znajduje :)
+
+![image](https://github.com/user-attachments/assets/88ace485-d0b4-4415-9e2b-cbcc69834237)
+W taki sposób prezentuje się moja struktura katalogów. 
+Aby móc uruchomić maszyny wirtualne należy wykorzystać polecenie `vagrant up` **WAŻNA INFORMACJA!! Jeśli wykonujemy operacje na pliki Vagrantfile musimy znajdować się w katalogu gdzie jest plik do którego będziemy się odnosić**
+
+![image](https://github.com/user-attachments/assets/76808e21-064f-4203-9927-067dc8fc7af2)
+
+
