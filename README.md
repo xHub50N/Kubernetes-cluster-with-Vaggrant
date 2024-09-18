@@ -6,7 +6,7 @@ Dokumentacja zawiera informacje jak krok po kroku zainstalować odpowiednie opro
 
 - [1. WSL](#1-wsl)
 - [2. Oracle VirtualBox](#2-Oracle-VirtualBox)
-- [3. Podłączenie VirtualBox do WSL](#4-Podłączenie-VirtualBox-do-WSL)
+- [3. Podłączenie VirtualBox do WSL](#3-Podłączenie-VirtualBox-do-WSL)
   - [3.1. Instalacja Vagrant](#3.1-Instalacja-Vagrant)
 
 
@@ -34,7 +34,7 @@ Sprawdzenie czy Vagrant został zainstlowany:
 ## 3. Podłączenie VirtualBox do WSL
 W tym kroku wykonam podłączenie VirtualBox-a pod system WSL. Ten krok jest bardzo ważny w dalszym działaniu naszego środowiska. Do naszego projektu wykorzystam oprogramowanie **Ansible** i jest ono dostępne tylko z poziomu Linuxa. Dzięki WSL możemy zainstalować na nim Ansible, który będzie wykonywać zadania na wirtualnych maszynach dostępnych z poziomu VirtualBoxa który jest zainstalowany na Windows.
 
-### 3.1 Instalacja Vagrant 
+### 3.1. Instalacja Vagrant 
 Vagrant to narzędzie do automatyzacji tworzenia i zarządzania środowiskami wirtualnymi. Umożliwia szybkie uruchamianie wirtualnych maszyn na różnych platformach, takich jak VirtualBox, Docker czy AWS, przy użyciu prostych skryptów. Vagrant automatyzuje proces konfiguracji, co ułatwia tworzenie spójnych i powtarzalnych środowisk programistycznych, minimalizując problemy wynikające z różnic w konfiguracji systemów.
 
 W naszym przypadku zainstalujemy Vagranta z poziomu systemu Ubuntu. Więcej informacji o instalacji można znaleźć w dokumentacji [Instalacja Vagranta na Linuxie](https://developer.hashicorp.com/vagrant/install#linux)
