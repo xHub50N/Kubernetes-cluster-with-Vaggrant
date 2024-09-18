@@ -1,0 +1,19 @@
+---
+- hosts: all
+  become: true
+  tasks:
+    - name: Zmień nazwę hosta w /etc/hostname
+      lineinfile:
+        path: /etc/hostname
+        line: "{{ hostname }}"
+        create: yes
+
+    - name: Zaktualizuj wpis 127.0.0.2 w /etc/hosts
+      lineinfile:
+        path: /etc/hosts
+        regexp: "^127.0.0.2"
+        line: "127.0.0.2 {{ hostname }}"
+        create: yes
+
+    - name: Restart hostname service
+      command: hostnamectl set-hostname {{ hostname }}
