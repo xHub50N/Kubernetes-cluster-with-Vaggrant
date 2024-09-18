@@ -6,7 +6,8 @@ Dokumentacja zawiera informacje jak krok po kroku zainstalować odpowiednie opro
 
 - [1. WSL](#1-wsl)
 - [2. Oracle VirtualBox](#2-Oracle-VirtualBox)
-- [3. Vagrant](#3-Vagrant)
+- [3. Podłączenie VirtualBox do WSL](#4-Podłączenie-VirtualBox-do-WSL)
+  - [3.1. Instalacja Vagrant](#3.1-Instalacja-Vagrant)
 
 
 ## 1. WSL
@@ -27,7 +28,13 @@ Oracle VirtualBox to darmowe oprogramowanie do wirtualizacji, które umożliwia 
 
 Aby zainstalować oprogramowanie należy przejść do strony [VirtualBox Download](https://www.virtualbox.org/wiki/Downloads), następnie wybieramy wersję dla naszego hosta. W moim przypadku jest to Windows.
 
-## 3. Vagrant 
+Sprawdzenie czy Vagrant został zainstlowany:
+![image](https://github.com/user-attachments/assets/537feb4e-8f44-4f8c-ae71-2477ef6f110e)
+
+## 3. Podłączenie VirtualBox do WSL
+W tym kroku wykonam podłączenie VirtualBox-a pod system WSL. Ten krok jest bardzo ważny w dalszym działaniu naszego środowiska. Do naszego projektu wykorzystam oprogramowanie **Ansible** i jest ono dostępne tylko z poziomu Linuxa. Dzięki WSL możemy zainstalować na nim Ansible, który będzie wykonywać zadania na wirtualnych maszynach dostępnych z poziomu VirtualBoxa który jest zainstalowany na Windows.
+
+### 3.1 Instalacja Vagrant 
 Vagrant to narzędzie do automatyzacji tworzenia i zarządzania środowiskami wirtualnymi. Umożliwia szybkie uruchamianie wirtualnych maszyn na różnych platformach, takich jak VirtualBox, Docker czy AWS, przy użyciu prostych skryptów. Vagrant automatyzuje proces konfiguracji, co ułatwia tworzenie spójnych i powtarzalnych środowisk programistycznych, minimalizując problemy wynikające z różnic w konfiguracji systemów.
 
 W naszym przypadku zainstalujemy Vagranta z poziomu systemu Ubuntu. Więcej informacji o instalacji można znaleźć w dokumentacji [Instalacja Vagranta na Linuxie](https://developer.hashicorp.com/vagrant/install#linux)
@@ -37,3 +44,4 @@ W naszym przypadku zainstalujemy Vagranta z poziomu systemu Ubuntu. Więcej info
 `echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list`
 
 `sudo apt update && sudo apt install vagrant`
+
