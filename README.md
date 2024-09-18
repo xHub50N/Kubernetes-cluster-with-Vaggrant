@@ -52,5 +52,4 @@ Aby podłączyć VirtualBox do Ubuntu należy wykonać te polecenia:
 echo 'export VAGRANT_WSL_ENABLE_WINDOWS_ACCESS="1"' >> ~/.bashrc
 echo 'export PATH="$PATH:/mnt/c/Program Files/Oracle/VirtualBox"' >> ~/.bashrc
 echo 'export VAGRANT_WSL_WINDOWS_ACCESS_USER_HOME_PATH="/mnt/c/Users/huber"'
-# now reload the ~/.bashrc file
 source ~/.bashrc`
