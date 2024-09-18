@@ -33,5 +33,7 @@ Vagrant to narzędzie do automatyzacji tworzenia i zarządzania środowiskami wi
 W naszym przypadku zainstalujemy Vagranta z poziomu systemu Ubuntu. Więcej informacji o instalacji można znaleźć w dokumentacji [Instalacja Vagranta na Linuxie](https://developer.hashicorp.com/vagrant/install#linux)
 
 `wget -O- https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg`
+
 `echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list`
+
 `sudo apt update && sudo apt install vagrant`
