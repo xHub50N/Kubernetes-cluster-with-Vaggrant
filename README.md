@@ -6,6 +6,7 @@ Dokumentacja zawiera informacje jak krok po kroku zainstalować odpowiednie opro
 
 - [1. WSL](#1-wsl)
 - [2. Oracle VirtualBox](#2-Oracle-VirtualBox)
+- [3. Vagrant](#3-Vagrant)
 
 
 ## 1. WSL
@@ -24,5 +25,11 @@ Aby przejść do systemu ubuntu wystarczy wpisać komendę: `wsl -d Ubuntu` i au
 ## 2. Oracle VirtualBox
 Oracle VirtualBox to darmowe oprogramowanie do wirtualizacji, które umożliwia uruchamianie wielu systemów operacyjnych na jednym fizycznym komputerze. Dzięki VirtualBox można tworzyć i zarządzać maszynami wirtualnymi, co pozwala na testowanie różnych systemów operacyjnych, aplikacji oraz symulowanie różnych środowisk bez potrzeby instalacji ich bezpośrednio na komputerze.
 
-Aby zainstalować oprogramowanie należy przejść do strony [VirtualBox Download](https://www.virtualbox.org/wiki/Downloads)
+Aby zainstalować oprogramowanie należy przejść do strony [VirtualBox Download](https://www.virtualbox.org/wiki/Downloads), następnie wybieramy wersję dla naszego hosta. W moim przypadku jest to Windows.
 
+## 3. Vagrant 
+Vagrant to narzędzie do automatyzacji tworzenia i zarządzania środowiskami wirtualnymi. Umożliwia szybkie uruchamianie wirtualnych maszyn na różnych platformach, takich jak VirtualBox, Docker czy AWS, przy użyciu prostych skryptów. Vagrant automatyzuje proces konfiguracji, co ułatwia tworzenie spójnych i powtarzalnych środowisk programistycznych, minimalizując problemy wynikające z różnic w konfiguracji systemów.
+
+W naszym przypadku zainstalujemy Vagranta z poziomu systemu Ubuntu.
+*Wszystkie polecenia zostaną wykonane z poziomu użytkownika root!*
+W pierwszej kolejności aktualizujemy repozytoria `apt update`
