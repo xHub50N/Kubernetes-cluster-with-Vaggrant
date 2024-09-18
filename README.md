@@ -5,13 +5,20 @@ Dokumentacja zawiera informacje jak krok po kroku zainstalować odpowiednie opro
 </p>
 
 - [1. WSL](#1-wsl)
+- [2. Oracle VirtualBox](#2-Oracle-VirtualBox)
 
 
 ## 1. WSL
 W realizacji projektu wykorzystam WSL czyli Windows Subsystem for Linux. Jest to część systemu operacyjnego Windows, które zostało wprowadzone w wersji 10. W moim przypadku wykorzystam dystrybuję Ubuntu która domyślnie jest instalowana w ramach WSL.
 
-Aby zainstalować oprogramowanie wystarczy wykorzystać polecenie: `wsl --install`, zostanie zainstalowana dystrybucja Ubuntu, jeśli chcemy wykorzystać inną dystrybucję musimy wykorzystać to polecenie: `wsl --install -d <Nazwa-dystrybucji>`
+Aby zainstalować oprogramowanie wystarczy wykorzystać polecenie: `wsl --install`, zostanie zainstalowana dystrybucja Ubuntu, jeśli chcemy wykorzystać inną dystrybucję musimy wykorzystać to polecenie: `wsl --install -d <Nazwa-dystrybucji>`. Istnieje jeszcze polecenie `wsl -o -l`, które wyświetla wszystkie dostępne dystrybucje Linuxa wspierające WSL.
 
 Po instalacji warto sprawdzić czy wszystko się poprawnie pobrało: `wsl -l`
 
 ![image](https://github.com/user-attachments/assets/44a1f80a-d9ba-4937-bf79-282856ad8e1a)
+
+Aby przejść do systemu ubuntu wystarczy wpisać komendę: `wsl -d Ubuntu` i automatycznie zostaniemy zalogowani do systemu. 
+
+![image](https://github.com/user-attachments/assets/918644af-509d-4bd9-b4f8-7391da661102)
+
+## 2. Oracle VirtualBox
