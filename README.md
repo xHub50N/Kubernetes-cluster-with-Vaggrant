@@ -7,7 +7,7 @@ Dokumentacja zawiera informacje jak krok po kroku zainstalować odpowiednie opro
 - [1. WSL](#1-wsl)
 - [2. Oracle VirtualBox](#2-Oracle-VirtualBox)
 - [3. Podłączenie VirtualBox do WSL](#3-Podłączenie-VirtualBox-do-WSL)
-  - [3.1. Instalacja Vagrant](#3.1-Instalacja-Vagrant)
+  - [3.1. Instalacja Vagrant](#31-Instalacja-Vagrant)
 
 
 ## 1. WSL
@@ -45,3 +45,12 @@ W naszym przypadku zainstalujemy Vagranta z poziomu systemu Ubuntu. Więcej info
 
 `sudo apt update && sudo apt install vagrant`
 
+### 3.2 Konfiguracja Ubuntu
+Aby podłączyć VirtualBox do Ubuntu należy wykonać te polecenia:
+
+`# append those two lines into ~/.bashrc
+echo 'export VAGRANT_WSL_ENABLE_WINDOWS_ACCESS="1"' >> ~/.bashrc
+echo 'export PATH="$PATH:/mnt/c/Program Files/Oracle/VirtualBox"' >> ~/.bashrc
+echo 'export VAGRANT_WSL_WINDOWS_ACCESS_USER_HOME_PATH="/mnt/c/Users/huber"'
+# now reload the ~/.bashrc file
+source ~/.bashrc`
