@@ -36,9 +36,6 @@ Oracle VirtualBox to darmowe oprogramowanie do wirtualizacji, które umożliwia 
 
 Aby zainstalować oprogramowanie należy przejść do strony [VirtualBox Download](https://www.virtualbox.org/wiki/Downloads), następnie wybieramy wersję dla naszego hosta. W moim przypadku jest to Windows.
 
-Sprawdzenie czy Vagrant został zainstlowany:
-![image](https://github.com/user-attachments/assets/537feb4e-8f44-4f8c-ae71-2477ef6f110e)
-
 ## 3. Podłączenie VirtualBox do WSL
 W tym kroku wykonam podłączenie VirtualBox-a pod system WSL. Ten krok jest bardzo ważny w dalszym działaniu naszego środowiska. Do naszego projektu wykorzystam oprogramowanie **Ansible** i jest ono dostępne tylko z poziomu Linuxa. Dzięki WSL możemy zainstalować na nim Ansible, który będzie wykonywać zadania na wirtualnych maszynach dostępnych z poziomu VirtualBoxa który jest zainstalowany na Windows.
 
@@ -52,6 +49,9 @@ W naszym przypadku zainstalujemy Vagranta z poziomu systemu Ubuntu. Więcej info
 `echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list`
 
 `sudo apt update && sudo apt install vagrant`
+
+Sprawdzenie czy Vagrant został zainstlowany:
+![image](https://github.com/user-attachments/assets/537feb4e-8f44-4f8c-ae71-2477ef6f110e)
 
 ### 3.2 Instalacja Ansible
 Ansible to narzędzie do automatyzacji zarządzania konfiguracją, wdrażania aplikacji i orkiestracji systemów. Umożliwia zarządzanie wieloma serwerami z jednego miejsca, używając prostych plików konfiguracyjnych (tzw. playbooków) zapisanych w formacie YAML. Ansible działa bez agentów, wykorzystując SSH do komunikacji, co czyni go łatwym w implementacji i bardzo elastycznym narzędziem do automatyzacji procesów IT.
