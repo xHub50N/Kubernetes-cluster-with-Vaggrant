@@ -56,13 +56,11 @@ Sprawdzenie czy Vagrant został zainstlowany:
 Ansible to narzędzie do automatyzacji zarządzania konfiguracją, wdrażania aplikacji i orkiestracji systemów. Umożliwia zarządzanie wieloma serwerami z jednego miejsca, używając prostych plików konfiguracyjnych (tzw. playbooków) zapisanych w formacie YAML. Ansible działa bez agentów, wykorzystując SSH do komunikacji, co czyni go łatwym w implementacji i bardzo elastycznym narzędziem do automatyzacji procesów IT.
 
 Aby zainstalować Ansible musimy wykonać odpowiednie polecenia:
-
-`sudo apt-add-repository ppa:ansible/ansible`
-
-`sudo apt update`
-
-`sudo apt install ansible`
-
+```
+sudo apt-add-repository ppa:ansible/ansible
+sudo apt update
+sudo apt install ansible
+```
 Sprawdzenie poprawności instalacji Ansible
 
 ![image](https://github.com/user-attachments/assets/32863f4a-d236-4d63-870b-a823e533ede4)
@@ -70,16 +68,14 @@ Sprawdzenie poprawności instalacji Ansible
 ### 3.3 Konfiguracja Ubuntu
 Aby podłączyć VirtualBox do Ubuntu należy wykonać te polecenia:
 
-`echo 'export VAGRANT_WSL_ENABLE_WINDOWS_ACCESS="1"' >> ~/.bashrc`
-
-`echo 'export PATH="$PATH:/mnt/c/Program Files/Oracle/VirtualBox"' >> ~/.bashrc`
-
-`echo 'export VAGRANT_WSL_WINDOWS_ACCESS_USER_HOME_PATH="/mnt/c/Users/huber"'`
-
-`source ~/.bashrc`
-
+```
+echo 'export VAGRANT_WSL_ENABLE_WINDOWS_ACCESS="1"' >> ~/.bashrc
+echo 'export PATH="$PATH:/mnt/c/Program Files/Oracle/VirtualBox"' >> ~/.bashrc
+echo 'export VAGRANT_WSL_WINDOWS_ACCESS_USER_HOME_PATH="/mnt/c/Users/huber"'
+source ~/.bashrc
+```
 Oraz dodatkowo musimy zainstalować plugin do vagranta
-`vagrant plugin install virtualbox_WSL2`
+```vagrant plugin install virtualbox_WSL2```
 
 ### 3.4 Import pliku Vagrantfile
 Zalecam aby wykorzystać lokalizację którą podaliśmy jako domowy katalog użytkownika w Windows tak jak u mnie czyli /mnt/c/Users/huber **Warto zwrócić uwagę na to że nie podajemy ścieżki tak jak w Windows czyli C:\Users\huber tylko korzystamy z Linuxowego schematu. Pliki które są współdzielone z Linuxem znajdują się w katalogu /mnt**
@@ -151,17 +147,17 @@ Wpierw musimy ściągnąć repozytorium na naszego WSL. To on będzie hostem nad
 ### 5.1 Wstępna konfiguracja 
 W pierwszej kolejności musimy pobrać manager pakietów pip. Ponieważ Kubespray opiera się na Ansible a Ansible jest technologią opartą na pythonie. W tym celu wykorzystamy polecenie: 
 
-`sudo apt install python3-pip python3-distutils python3-apt`
+```sudo apt install python3-pip python3-distutils python3-apt```
 
 Następnie musimy zainstalować odpowiednie zależności z pliku `pip3 install -r requirements.txt`
 
 Ostanimi z poleceń konfiguracyjnych są: 
 
-`cp -rfp inventory/sample inventory/mycluster` - inventory/{nazwa_folderu}, w moim przypadku zostało domyślne mycluster **Musimy pamiętać aby własną nazwę klastra stosować wszędzie**
+```cp -rfp inventory/sample inventory/mycluster``` - inventory/{nazwa_folderu}, w moim przypadku zostało domyślne mycluster **Musimy pamiętać aby własną nazwę klastra stosować wszędzie**
 
-`declare -a IPS=(192.168.1.110 192.168.1.111 192.168.1.112)`
+```declare -a IPS=(192.168.1.110 192.168.1.111 192.168.1.112)```
 
-`CONFIG_FILE=inventory/mycluster/hosts.yaml python3 contrib/inventory_builder/inventory.py ${IPS[@]}` **Tutaj można wykorzystać własną nazwe katalogu klastra**
+```CONFIG_FILE=inventory/mycluster/hosts.yaml python3 contrib/inventory_builder/inventory.py ${IPS[@]}``` **Tutaj można wykorzystać własną nazwe katalogu klastra**
 
 ![image](https://github.com/user-attachments/assets/7f615efa-638e-47e9-9726-185c4d70fa89)
 
@@ -171,7 +167,7 @@ Musimy zedytować plik konfiguracyjny `~/kubespray/inventory/mycluster/hosts.yam
 
 Na samym końcu musimy wykonać polecenie:
 
-`ansible-playbook -i inventory/mycluster/hosts.yaml --become --become-user=root -u vagrant --private-key=~/.ssh/id_ed25519 cluster.yml` 
+```ansible-playbook -i inventory/mycluster/hosts.yaml --become --become-user=root -u vagrant --private-key=~/.ssh/id_ed25519 cluster.yml```
 
 Ono sprawi że nasz klaster zostanie stworzony na hostach. Instalacja może trochę potrwać więc można zrobić sobie przerwę na kawę, oczywiście warto pilnować jakie komunikaty są wyświetlane na ekranie!
 
@@ -184,11 +180,10 @@ Oznacza to że nasz klaster został utworzony!
 Na maszynie referencyjnej musimy zainstalować oprogramowanie Kubectl aby można było komunikować się z całym klastrem Kubernetes.
 
 Musimy wykonać te polecenia aby zainstalować Kubectl.
-
-`curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"`
-
-`sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl`
-
+```
+curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+```
 Na sam koniec możemy sprawdzić czy oprogramowanie zostało zainstalowane:
 
 ![image](https://github.com/user-attachments/assets/55380165-d397-4548-a49d-6a877e615341)
