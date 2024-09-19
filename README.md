@@ -15,7 +15,7 @@ Dokumentacja zawiera informacje jak krok po kroku zainstalować odpowiednie opro
   - [4.1. Generowanie klucza prywatnego i publicznego](#41-Generowanie-klucza-prywatnego-i-publicznego)
   - [4.2. DNS](#42-DNS)
 - [5. Kubespray](#5-Kubespray)
-  - [5.1. Wstępna konfiguracja](#51-Wstepna-konfiguracja)
+  - [5.1. Wstępna konfiguracja](#51-Wstępna-konfiguracja)
   - [5.2. Konfiguracja Kubectl](#52-Konfiguracja-Kubectl)
 
 
