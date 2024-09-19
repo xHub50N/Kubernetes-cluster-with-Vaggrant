@@ -15,7 +15,8 @@ Dokumentacja zawiera informacje jak krok po kroku zainstalować odpowiednie opro
   - [4.1. Generowanie klucza prywatnego i publicznego](#41-Generowanie-klucza-prywatnego-i-publicznego)
   - [4.2. DNS](#42-DNS)
 - [5. Kubespray](#5-Kubespray)
-  - [5.1. Wstępna konfiguracja](#51-Wstepna-konfiguracja) 
+  - [5.1. Wstępna konfiguracja](#51-Wstepna-konfiguracja)
+  - [5.2. Konfiguracja Kubectl](#52-Konfiguracja-Kubectl)
 
 
 ## 1. WSL
@@ -101,12 +102,11 @@ Ten widok pokazuje nam że zadania dla maszyny srv3 (te same zadania zostały wy
 ## 4. Konfiguracja wirtualnych maszyn
 Na początku musimy się upewnić że komunikacja pomiędzy WSL a wirtualnymi maszynami przebiega sprawnie. W tym celu wykorzystamy polecenie `vagrant ssh <nazwa_maszyny>`. **Należy pamiętać aby wykonywać polecenia w folderze w którym znajduej się plik Vagrantfile**
 
-
 ![image](https://github.com/user-attachments/assets/06d1b64b-93c2-48be-8fad-e1434e8d87b1)
 
 ![image](https://github.com/user-attachments/assets/6d9c0540-5153-4f1d-9ff7-f702835e3a7f)
 
-![image](https://github.com/user-attachments/assets/c1b29cad-dc53-42b2-9cda-3532b2c1307c)
+![image](https://github.com/user-attachments/assets/dd0ee38d-374d-4ffe-b6cb-1c8e507c6b1c)
 
 Do wszystkich maszyn mamy dostęp poprzez SSH. Warto zaznaczyć że na każdej z maszyn istnieje użytkownik **vagrant**
 
@@ -176,5 +176,41 @@ Na samym końcu musimy wykonać polecenie:
 `ansible-playbook -i inventory/mycluster/hosts.yaml --become --become-user=root -u vagrant --private-key=~/.ssh/id_ed25519 cluster.yml` 
 
 Ono sprawi że nasz klaster zostanie stworzony na hostach. Instalacja może trochę potrwać więc można zrobić sobie przerwę na kawę, oczywiście warto pilnować jakie komunikaty są wyświetlane na ekranie!
+
+Po instalacji powinien wyświetlić się taki komunikat:
+![image](https://github.com/user-attachments/assets/aea4af38-5181-4aa0-b179-0464729c29e0)
+
+Oznacza to że nasz klaster został utworzony!
+
+### 5.2 Konfiguracja Kubectl
+Na maszynie referencyjnej musimy zainstalować oprogramowanie Kubectl aby można było komunikować się z całym klastrem Kubernetes.
+
+Musimy wykonać te polecenia aby zainstalować Kubectl.
+
+`curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"`
+
+`sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl`
+
+Na sam koniec możemy sprawdzić czy oprogramowanie zostało zainstalowane:
+
+![image](https://github.com/user-attachments/assets/55380165-d397-4548-a49d-6a877e615341)
+
+Kolejnym krokiem będzie przekopiowanie folderu .kube z maszyny srv1 która służy jako kube control plane. Kube control plane jest to swego rodzaju manager który zarządza innymi węzłami w klastrze.
+
+W pierwszej kolejności musimy przekopiować katalog .kube do domowego katalogu użytkownika vagrant `cp -r /root/.kube /home/vagrant/`, musimy zmienić właściciela folderu w celu przesłania go przez SSH na system referencyjny `chown -R vagrant:vagrant /home/vagrant.kube`
+
+Na WSL musimy zainstalować dodatek do Vagranta a mianowicie `vagrant plugin install vagrant-scp` jest to wtyczka która ułatwia pobieraniem i wysyłaniem plików pomiędzy maszynmi działającymi w środowisku vagrant.
+
+Następnie ściagamy odpowiedni folder .kube na system WSL `vagrant scp srv1:/home/vagrant/.kube /root`
+
+Ostatnią rzeczą którą musimy wykonać to edycja pliku /root/.kube/config a mianowicie musimy podać adres IP hosta który służy jako control plane
+
+![image](https://github.com/user-attachments/assets/d6e5737a-9618-49c6-a065-cca9acb9cefe)
+
+Na sam koniec sprawdzimy czy WSL widzi wszystkie węzły z poziomu kubectl
+
+![image](https://github.com/user-attachments/assets/a606d29d-f9d8-494f-a009-01f8bd296358)
+
+Jak widać wszystko działa jak należy!
 
 
