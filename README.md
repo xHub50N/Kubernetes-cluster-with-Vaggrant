@@ -1,51 +1,47 @@
-# Dokumentacja stworzenia własnego klastra Kubernetes z wykorzystaniem narzędzi Vagrant, Ansible i Kubespray
+# Documentation for Creating a Custom Kubernetes Cluster Using Vagrant, Ansible, and Kubespray
 
-<p style="text-align:center;">
-Dokumentacja zawiera informacje jak krok po kroku zainstalować odpowiednie oprogramowanie oraz jak poprawnie przygotować środowisko do pracy z plikami Vagrantfile oraz maszynami wirtualnymi w VirtualBox firmy Oracle. Dodatkowo pokażę jak w bezpieczny sposób podłączyć się do urządzeń z wykorzystaniem ssh i klucza publicznego w celu zabezpieczenia komunikacji pomiędzy hostem sterującym a hostami w klastrze.
+<p style="text-align: justify; text-justify: center">
+This documentation provides step-by-step instructions for installing the necessary software and preparing the environment for working with Vagrantfile and virtual machines in Oracle VirtualBox. Additionally, it explains how to securely connect to devices using SSH and a public key to ensure secure communication between the control host and the cluster hosts.
 </p>
 
 - [1. WSL](#1-wsl)
-- [2. Oracle VirtualBox](#2-Oracle-VirtualBox)
-- [3. Podłączenie VirtualBox do WSL](#3-Podłączenie-VirtualBox-do-WSL)
-  - [3.1. Instalacja Vagrant](#31-Instalacja-Vagrant)
-  - [3.2. Instalacja Ansible](#32-Instalacja-Ansible)
-  - [3.3. Konfiguracja Ubuntu](#33-Konfiguracja-Ubuntu)
-  - [3.4. Import pliku Vagrantfile](#34-Import-pliku-Vagrantfile)
-- [4. Konfiguracja wirtualnych maszyn](#4-Konfiguracja-wirtualnych-maszyn)
-  - [4.1. Generowanie klucza prywatnego i publicznego](#41-Generowanie-klucza-prywatnego-i-publicznego)
-  - [4.2. DNS](#42-DNS)
-- [5. Kubespray](#5-Kubespray)
-  - [5.1. Wstępna konfiguracja](#51-Wstepna-konfiguracja) 
+- [2.  Oracle VirtualBox](#2-oracle-virtualbox)
+- [3. Connecting VirtualBox to WSL](#3-connecting-virtualbox-to-wsl)
+  - [3.1. Installing Vagrant ](#31-installing-vagrant)
+  - [3.2. Installing Ansible](#32-installing-ansible)
+  - [3.3. Configuring Ubuntu](#33-configuring-ubuntu)
+  - [3.4. Importing the Vagrantfile](#34-importing-the-vagrantfile)
+- [4. Configuring Virtual Machines](#4-configuring-virtual-machines)
+  - [4.1. Generating Private and Public Keys](#41-generating-private-and-public-keys)
+  - [4.2. DNS](#42-dns)
+- [5. Kubespray](#5-kubespray)
+  - [5.1. Initial Configuration](#51-initial-configuration) 
 
 
 ## 1. WSL
-W realizacji projektu wykorzystam WSL czyli Windows Subsystem for Linux. Jest to część systemu operacyjnego Windows, które zostało wprowadzone w wersji 10. W moim przypadku wykorzystam dystrybuję Ubuntu która domyślnie jest instalowana w ramach WSL.
+For this project, I will use WSL (Windows Subsystem for Linux). It is a feature of the Windows operating system introduced in Windows 10. In my case, I will use the Ubuntu distribution, which is the default installation within WSL.
 
-Aby zainstalować oprogramowanie wystarczy wykorzystać polecenie: `wsl --install`, zostanie zainstalowana dystrybucja Ubuntu, jeśli chcemy wykorzystać inną dystrybucję musimy wykorzystać to polecenie: `wsl --install -d <Nazwa-dystrybucji>`. Istnieje jeszcze polecenie `wsl -o -l`, które wyświetla wszystkie dostępne dystrybucje Linuxa wspierające WSL.
+To install the software, use the command: `wsl --install`, This will install the Ubuntu distribution. If you want to use a different distribution, run: `wsl --install -d <distribution-name>`. You can also use `wsl -o -l`, to display all available Linux distributions supported by WSL.
 
-Po instalacji warto sprawdzić czy wszystko się poprawnie pobrało: `wsl -l`
+After installation, verify everything is installed correctly with: `wsl -l`
 
-![image](https://github.com/user-attachments/assets/44a1f80a-d9ba-4937-bf79-282856ad8e1a)
+![alt text](img/image-1.png)
 
-Aby przejść do systemu ubuntu wystarczy wpisać komendę: `wsl -d Ubuntu` i automatycznie zostaniemy zalogowani do systemu. 
+To switch to the Ubuntu system, enter: `wsl -d Ubuntu` This will automatically log you into the system.
 
-![image](https://github.com/user-attachments/assets/918644af-509d-4bd9-b4f8-7391da661102)
+![alt text](img/image.png)
 
 ## 2. Oracle VirtualBox
-Oracle VirtualBox to darmowe oprogramowanie do wirtualizacji, które umożliwia uruchamianie wielu systemów operacyjnych na jednym fizycznym komputerze. Dzięki VirtualBox można tworzyć i zarządzać maszynami wirtualnymi, co pozwala na testowanie różnych systemów operacyjnych, aplikacji oraz symulowanie różnych środowisk bez potrzeby instalacji ich bezpośrednio na komputerze.
+Oracle VirtualBox is free virtualization software that allows you to run multiple operating systems on a single physical computer. With VirtualBox, you can create and manage virtual machines, enabling you to test different operating systems, applications, and simulate various environments without installing them directly on your computer.
 
-Aby zainstalować oprogramowanie należy przejść do strony [VirtualBox Download](https://www.virtualbox.org/wiki/Downloads), następnie wybieramy wersję dla naszego hosta. W moim przypadku jest to Windows.
+To install the software, visit the [VirtualBox Download](https://www.virtualbox.org/wiki/Downloads), page and choose the version for your host system. In my case, it’s Windows.
 
-Sprawdzenie czy Vagrant został zainstlowany:
-![image](https://github.com/user-attachments/assets/537feb4e-8f44-4f8c-ae71-2477ef6f110e)
 
-## 3. Podłączenie VirtualBox do WSL
-W tym kroku wykonam podłączenie VirtualBox-a pod system WSL. Ten krok jest bardzo ważny w dalszym działaniu naszego środowiska. Do naszego projektu wykorzystam oprogramowanie **Ansible** i jest ono dostępne tylko z poziomu Linuxa. Dzięki WSL możemy zainstalować na nim Ansible, który będzie wykonywać zadania na wirtualnych maszynach dostępnych z poziomu VirtualBoxa który jest zainstalowany na Windows.
-
-### 3.1. Instalacja Vagrant 
-Vagrant to narzędzie do automatyzacji tworzenia i zarządzania środowiskami wirtualnymi. Umożliwia szybkie uruchamianie wirtualnych maszyn na różnych platformach, takich jak VirtualBox, Docker czy AWS, przy użyciu prostych skryptów. Vagrant automatyzuje proces konfiguracji, co ułatwia tworzenie spójnych i powtarzalnych środowisk programistycznych, minimalizując problemy wynikające z różnic w konfiguracji systemów.
-
-W naszym przypadku zainstalujemy Vagranta z poziomu systemu Ubuntu. Więcej informacji o instalacji można znaleźć w dokumentacji [Instalacja Vagranta na Linuxie](https://developer.hashicorp.com/vagrant/install#linux)
+## 3. Connecting VirtualBox to WSL
+In this step, we will connect VirtualBox to the WSL system. This is crucial for the proper functioning of our environment. For this project, I will use Ansible, which is only available on Linux. Using WSL, we can install Ansible and use it to manage tasks on virtual machines accessible via VirtualBox installed on Windows.
+### 3.1. Installing Vagrant 
+Vagrant is a tool for automating the creation and management of virtual environments. It allows you to quickly launch virtual machines on various platforms, such as VirtualBox, Docker, or AWS, using simple scripts. Vagrant automates configuration processes, making it easier to create consistent and repeatable development environments, reducing issues caused by differences in system configurations.
+In our case, we will install Vagrant on the Ubuntu system. Detailed installation instructions can be found in the [Vagrant Installation Documentation](https://developer.hashicorp.com/vagrant/install#linux)
 
 `wget -O- https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg`
 
@@ -53,10 +49,14 @@ W naszym przypadku zainstalujemy Vagranta z poziomu systemu Ubuntu. Więcej info
 
 `sudo apt update && sudo apt install vagrant`
 
-### 3.2 Instalacja Ansible
-Ansible to narzędzie do automatyzacji zarządzania konfiguracją, wdrażania aplikacji i orkiestracji systemów. Umożliwia zarządzanie wieloma serwerami z jednego miejsca, używając prostych plików konfiguracyjnych (tzw. playbooków) zapisanych w formacie YAML. Ansible działa bez agentów, wykorzystując SSH do komunikacji, co czyni go łatwym w implementacji i bardzo elastycznym narzędziem do automatyzacji procesów IT.
+Verify the Vagrant installation after completing these steps.
 
-Aby zainstalować Ansible musimy wykonać odpowiednie polecenia:
+![alt text](img/image-2.png)
+
+### 3.2 Installing Ansible
+Ansible is a tool for automating configuration management, application deployment, and system orchestration. It enables managing multiple servers from a single location using simple configuration files (called playbooks) written in YAML format. Ansible is agentless and uses SSH for communication, making it easy to implement and highly flexible for automating IT processes.
+
+To install Ansible, execute the following commands:
 
 `sudo apt-add-repository ppa:ansible/ansible`
 
@@ -64,117 +64,113 @@ Aby zainstalować Ansible musimy wykonać odpowiednie polecenia:
 
 `sudo apt install ansible`
 
-Sprawdzenie poprawności instalacji Ansible
+Verify the Ansible installation after completing these steps.
 
-![image](https://github.com/user-attachments/assets/32863f4a-d236-4d63-870b-a823e533ede4)
+![alt text](img/image-3.png)
 
-### 3.3 Konfiguracja Ubuntu
-Aby podłączyć VirtualBox do Ubuntu należy wykonać te polecenia:
+### 3.3 Configuring Ubuntu
+To connect VirtualBox to Ubuntu, execute the following commands:
 
 `echo 'export VAGRANT_WSL_ENABLE_WINDOWS_ACCESS="1"' >> ~/.bashrc`
 
 `echo 'export PATH="$PATH:/mnt/c/Program Files/Oracle/VirtualBox"' >> ~/.bashrc`
 
-`echo 'export VAGRANT_WSL_WINDOWS_ACCESS_USER_HOME_PATH="/mnt/c/Users/huber"'`
+`echo 'export VAGRANT_WSL_WINDOWS_ACCESS_USER_HOME_PATH="/mnt/c/Users/{username}"'`
 
 `source ~/.bashrc`
 
-Oraz dodatkowo musimy zainstalować plugin do vagranta
+Additionally, you need to install a Vagrant plugin:
 `vagrant plugin install virtualbox_WSL2`
 
-### 3.4 Import pliku Vagrantfile
-Zalecam aby wykorzystać lokalizację którą podaliśmy jako domowy katalog użytkownika w Windows tak jak u mnie czyli /mnt/c/Users/huber **Warto zwrócić uwagę na to że nie podajemy ścieżki tak jak w Windows czyli C:\Users\huber tylko korzystamy z Linuxowego schematu. Pliki które są współdzielone z Linuxem znajdują się w katalogu /mnt**
+### 3.4 Importing the Vagrantfile
+I recommend using the location specified as the user's home directory in Windows, like /mnt/c/Users/{username} in my case. Note that we do not use Windows-style paths like C:\Users\{username} but instead follow the Linux schema. Files shared with Linux are located in the /mnt directory.
 
-Plik Vagrantfile jest w repozytorium i tam szczegółowo jest opisane w pliku się znajduje :)
+The Vagrantfile is available in the repository, where it is described in detail. :)
 
-![image](https://github.com/user-attachments/assets/88ace485-d0b4-4415-9e2b-cbcc69834237)
+![alt text](img/image-4.png)
 
-W taki sposób prezentuje się moja struktura katalogów. 
-Aby móc uruchomić maszyny wirtualne należy wykorzystać polecenie `vagrant up` **WAŻNA INFORMACJA!! Jeśli wykonujemy operacje na pliki Vagrantfile musimy znajdować się w katalogu gdzie jest plik do którego będziemy się odnosić**
+To start virtual machines, use the vagrant up command `vagrant up` **IMPORTANT: If you are performing operations on the Vagrantfile, you must be in the directory where the Vagrantfile is located.**
 
-![image](https://github.com/user-attachments/assets/76808e21-064f-4203-9927-067dc8fc7af2)
+![alt text](img/image-5.png)
 
-Ten widok pokazuje nam że zadania dla maszyny srv3 (te same zadania zostały wykonane dla maszyny srv1 i srv2) zostały poprawnie wykonane oraz że wszystkie maszyny zostaly uruchomione i system został zainstalowany
+The output shows that tasks for the machine srv3 (similar tasks were completed for srv1 and srv2) were successfully executed and that all machines have been started with the system installed.
 
-![image](https://github.com/user-attachments/assets/84b06313-5f6b-427f-b063-ced9036ed198)
+![alt text](img/image-6.png)
 
-## 4. Konfiguracja wirtualnych maszyn
-Na początku musimy się upewnić że komunikacja pomiędzy WSL a wirtualnymi maszynami przebiega sprawnie. W tym celu wykorzystamy polecenie `vagrant ssh <nazwa_maszyny>`. **Należy pamiętać aby wykonywać polecenia w folderze w którym znajduej się plik Vagrantfile**
+## 4. Configuring Virtual Machines
+First, ensure that communication between WSL and the virtual machines works seamlessly. To verify, use the command vagrant ssh <machine_name>. Remember to execute commands in the folder containing the Vagrantfile.
 
+![alt text](img/image-7.png)
 
-![image](https://github.com/user-attachments/assets/06d1b64b-93c2-48be-8fad-e1434e8d87b1)
+![alt text](img/image-8.png)
 
-![image](https://github.com/user-attachments/assets/6d9c0540-5153-4f1d-9ff7-f702835e3a7f)
+![alt text](img/image-9.png)
 
-![image](https://github.com/user-attachments/assets/c1b29cad-dc53-42b2-9cda-3532b2c1307c)
+Access to all machines is available via SSH. Note that each machine has a default user named **vagrant**
 
-Do wszystkich maszyn mamy dostęp poprzez SSH. Warto zaznaczyć że na każdej z maszyn istnieje użytkownik **vagrant**
+### 4.1 Generating Private and Public Keys
+You might not always be able to or want to use the `vagrant ssh <machine_name>` command. For this purpose, we’ll generate public and private keys using the OpenSSH tool.
 
-### 4.1 Generowanie klucza prywatnego i publicznego
-Nie zawsze będziemy mogli albo chcieli wykorzystać polecenie `vagrant ssh <nazwa_maszyny>`. W tym celu wykorzystamy mechanizm generowania kluczy publicznych i prywatnych za pomocą oprogramowania OPENSSH.
+To generate keys, use the command: `ssh-keygen -t ed25519 -b 521`, You’ll then be prompted to name the file and set a passphrase (both are optional, though setting a passphrase is recommended!).
+![alt text](img/image-10.png)
 
-Polecenie do generowania kluczy to `ssh-keygen -t ed25519 -b 521`, następnie zostaniemy poproszeni o nazwanie pliku i nadanie hasła (obie opcje nie są wymagane, chociaż zalecam aby nadać hasło :) )
+Next, copy the public key value so it can be added to remote hosts.
 
-![image](https://github.com/user-attachments/assets/5866d16f-52c4-4a0a-828b-205ad1c2debb)
+![alt text](img/image-11.png)
 
-Następnie musimy skopiować wartość klucza publicznego aby można było go wkleić do zdalnych hostów.
+Using your favorite text editor, edit the file: /home/vagrant/.ssh/authorized_keys
 
-![image](https://github.com/user-attachments/assets/2e1691af-87fb-4da2-a91a-968fe9480d58)
+![alt text](img/image-12.png)
 
-Za pomocą naszego ulubionego edytora tekstu edytujemy plik /home/vagrant/.ssh/authorized_keys
-
-![image](https://github.com/user-attachments/assets/958cfd43-0ed5-488d-a506-51a48c80b705)
-
-Tą samą czynność wykonujemy na hoscie srv2 i srv3.
+Repeat this process on srv2 and srv3 hosts.
 
 ### 4.2 DNS
 
-Z pewnością przyda nam się aby nasze hosty widziały się po nazwach DNS aby nam ułatwić pracę z zapamiętywaniem nazw a nie całych adresów IP. Musimy zedytować plik `/etc/hosts`
+It will be helpful for our hosts to recognize each other by DNS names rather than IP addresses, making it easier to work without remembering full IPs. To achieve this, edit the `/etc/hosts` file.
 
-![image](https://github.com/user-attachments/assets/2489c275-561d-4b75-936e-3cb0c7ad15e5)
+![alt text](img/image-13.png)
 
-Dodajemy adresy IP naszych zdalnych hostów i ich nazwy. Wykonujemy to na systemie WSL i na hoscie srv1, srv2 i srv3.
+Add the IP addresses of your remote hosts along with their names. Perform this action on the WSL system and on the srv1, srv2, and srv3 hosts.
 
-![image](https://github.com/user-attachments/assets/9965021c-bf50-46af-8040-7ea0016ec753)
+![alt text](img/image-14.png)
 
-Jak widać udało się podłączyć do hosta srv1 za pomocą klucza!
+As shown, we successfully connected to the srv1 host using the key!
 
 ## 5. Kubespray
-Kubespray to narzędzie open-source do automatyzacji wdrażania i zarządzania klastrami Kubernetes. Oparte na Ansible, umożliwia szybkie uruchomienie klastrów Kubernetes na różnych infrastrukturach (chmura, serwery fizyczne lub wirtualne). Kubespray wspiera funkcje, takie jak konfiguracja sieci, bezpieczeństwa i monitorowania, zapewniając elastyczność i gotowe do produkcji środowiska Kubernetes.
+Kubespray is an open-source tool for automating the deployment and management of Kubernetes clusters. Based on Ansible, it enables the quick setup of Kubernetes clusters on various infrastructures (cloud, physical servers, or virtual machines). Kubespray supports features such as network configuration, security, and monitoring, providing flexible and production-ready Kubernetes environments.
 
-Repozytorium Kubespray można znaleźć na githubie [Kubespray-repo](https://github.com/kubernetes-sigs/kubespray/tree/master)
+You can find the Kubespray repository on GitHub: [Kubespray-repo](https://github.com/kubernetes-sigs/kubespray/tree/master)
 
-Wpierw musimy ściągnąć repozytorium na naszego WSL. To on będzie hostem nadzorującym cały klaster także na nim wykonamy instalacje i konfigurację Kubespray.
+First, download the repository to your WSL. This system will serve as the control host overseeing the entire cluster, so we will install and configure Kubespray here
 
-![image](https://github.com/user-attachments/assets/7c10aca1-b668-4134-976f-5456f3ed4c0c)
+![alt text](img/image-15.png)
 
-**UWAGA! Polecenia dotyczące Kubespray musimy wykonać jednocześnie będąć w katalogu repozytorium**
+**IMPORTANT: Commands related to Kubespray must be executed while in the repository directory.**
 
-### 5.1 Wstępna konfiguracja 
-W pierwszej kolejności musimy pobrać manager pakietów pip. Ponieważ Kubespray opiera się na Ansible a Ansible jest technologią opartą na pythonie. W tym celu wykorzystamy polecenie: 
+### 5.1 Initial Configuration
+First, install the Python package manager pip, as Kubespray relies on Ansible, which in turn is based on Python. Use the following command:
 
 `sudo apt install python3-pip python3-distutils python3-apt`
 
-Następnie musimy zainstalować odpowiednie zależności z pliku `pip3 install -r requirements.txt`
+Then, install the necessary dependencies from the `requirements.txt` file: `pip3 install -r requirements.txt`
 
-Ostanimi z poleceń konfiguracyjnych są: 
+The final configuration steps include editing the file
 
-`cp -rfp inventory/sample inventory/mycluster` - inventory/{nazwa_folderu}, w moim przypadku zostało domyślne mycluster **Musimy pamiętać aby własną nazwę klastra stosować wszędzie**
+`cp -rfp inventory/sample inventory/mycluster` - inventory/{dir_name}
 
 `declare -a IPS=(192.168.1.110 192.168.1.111 192.168.1.112)`
 
-`CONFIG_FILE=inventory/mycluster/hosts.yaml python3 contrib/inventory_builder/inventory.py ${IPS[@]}` **Tutaj można wykorzystać własną nazwe katalogu klastra**
+`CONFIG_FILE=inventory/mycluster/hosts.yaml python3 contrib/inventory_builder/inventory.py ${IPS[@]}`
 
-![image](https://github.com/user-attachments/assets/7f615efa-638e-47e9-9726-185c4d70fa89)
+![alt text](img/image-16.png)
 
-Musimy zedytować plik konfiguracyjny `~/kubespray/inventory/mycluster/hosts.yaml` dotyczący hostów ponieważ domyślne nazwy DNS nie pasują do rzeczywistych nazw hostów 
+Edit configuration file: `~/kubespray/inventory/mycluster/hosts.yaml` to update the host settings, as the default DNS names do not match the actual host names.
 
-![image](https://github.com/user-attachments/assets/22e4dd85-10fd-4f26-8722-ba9f125ff78d)
+![alt text](img/image-17.png)
 
-Na samym końcu musimy wykonać polecenie:
+Finally, execute the following command to create the cluster:
 
 `ansible-playbook -i inventory/mycluster/hosts.yaml --become --become-user=root -u vagrant --private-key=~/.ssh/id_ed25519 cluster.yml` 
 
-Ono sprawi że nasz klaster zostanie stworzony na hostach. Instalacja może trochę potrwać więc można zrobić sobie przerwę na kawę, oczywiście warto pilnować jakie komunikaty są wyświetlane na ekranie!
-
+This will set up the cluster on the hosts. The installation might take some time, so you can grab a coffee while keeping an eye on the messages displayed on the screen!
 
