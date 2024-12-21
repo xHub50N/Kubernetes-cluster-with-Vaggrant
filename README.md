@@ -150,7 +150,7 @@ First, download the repository to your WSL. This system will serve as the contro
 ### 5.1 Initial Configuration
 First, install the Python package manager pip, as Kubespray relies on Ansible, which in turn is based on Python. Use the following command:
 
-`sudo apt install python3-pip python3-distutils python3-apt`
+```sudo apt install python3-pip python3-distutils python3-apt```
 
 Then, install the necessary dependencies from the `requirements.txt` file: `pip3 install -r requirements.txt`
 
@@ -158,7 +158,7 @@ The final configuration steps include editing the file
 
 `cp -rfp inventory/sample inventory/mycluster` - inventory/{dir_name}
 
-`declare -a IPS=(192.168.1.110 192.168.1.111 192.168.1.112)`
+```declare -a IPS=(192.168.1.110 192.168.1.111 192.168.1.112)```
 
 `CONFIG_FILE=inventory/mycluster/hosts.yaml python3 contrib/inventory_builder/inventory.py ${IPS[@]}`
 
@@ -170,7 +170,7 @@ Edit configuration file: `~/kubespray/inventory/mycluster/hosts.yaml` to update 
 
 Finally, execute the following command to create the cluster:
 
-`ansible-playbook -i inventory/mycluster/hosts.yaml --become --become-user=root -u vagrant --private-key=~/.ssh/id_ed25519 cluster.yml` 
+```ansible-playbook -i inventory/mycluster/hosts.yaml --become --become-user=root -u vagrant --private-key=~/.ssh/id_ed25519 cluster.yml```
 
 This will set up the cluster on the hosts. The installation might take some time, so you can grab a coffee while keeping an eye on the messages displayed on the screen!
 
